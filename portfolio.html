@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writer Portfolio — Scripts, Stories & Dialogues</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Courier+Prime:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --ink:#0f0e0d;
+    --paper:#ede8de;
+    --paper-dim:#ddd5c4;
+    --amber:#d4a24c;
+    --crimson:#8b2e2e;
+    --slate:#6b7078;
+    --line: rgba(237,232,222,0.14);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+  }
+  a{color:inherit;}
+
+  /* ---------- sprocket rail (structural, encodes "filmstrip" not decoration) ---------- */
+  .rail{
+    position:fixed; top:0; bottom:0; width:26px; z-index:50;
+    background:repeating-linear-gradient(var(--ink) 0 0);
+    display:flex; flex-direction:column; align-items:center;
+    justify-content:space-evenly;
+  }
+  .rail.left{left:0;} .rail.right{right:0;}
+  .rail span{width:12px; height:12px; border-radius:3px; background:#000; box-shadow: inset 0 0 0 1px rgba(237,232,222,0.15);}
+  body{padding-left:26px; padding-right:26px;}
+  @media (max-width:640px){ .rail{display:none;} body{padding-left:0; padding-right:0;} }
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky; top:0; z-index:40;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 40px; background:rgba(15,14,13,0.85); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:2px; color:var(--amber);}
+  .navlinks{display:flex; gap:28px; font-size:0.85rem; letter-spacing:1px; text-transform:uppercase;}
+  .navlinks a{opacity:0.75; text-decoration:none; transition:opacity .2s;}
+  .navlinks a:hover{opacity:1; color:var(--amber);}
+  @media (max-width:640px){.navlinks{gap:14px; font-size:0.7rem;} nav{padding:16px 20px;}}
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:88vh; display:flex; align-items:center; justify-content:center;
+    padding:60px 20px; position:relative;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 30%, rgba(212,162,76,0.10), transparent 70%);
+  }
+  .page{
+    background:var(--paper); color:var(--ink);
+    width:min(640px, 92vw); padding:52px 48px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.05);
+    font-family:'Courier Prime', monospace;
+    position:relative;
+  }
+  .page::before{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background-image: repeating-linear-gradient(rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 28px);
+  }
+  .slug{font-weight:700; letter-spacing:1px;}
+  .action{margin-top:18px; line-height:1.7;}
+  .char{margin-top:26px; text-align:center; font-weight:700; letter-spacing:2px;}
+  .dialogue{max-width:380px; margin:6px auto 0; text-align:center; line-height:1.6;}
+  .caret{display:inline-block; width:9px; background:var(--ink); animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .byline{margin-top:34px; font-family:'Inter',sans-serif;}
+  .name{font-family:'Bebas Neue',sans-serif; font-size:clamp(2.2rem,6vw,3.6rem); letter-spacing:2px; line-height:1;}
+  .role{color:var(--slate); font-size:0.95rem; margin-top:6px; letter-spacing:0.5px;}
+  .tag{
+    display:inline-block; margin-top:16px; padding:5px 12px;
+    background:var(--crimson); color:var(--paper); font-size:0.7rem;
+    letter-spacing:1.5px; text-transform:uppercase; font-family:'Inter',sans-serif;
+  }
+
+  /* ---------- section shell ---------- */
+  section{padding:90px 8vw;}
+  .eyebrow{font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:3px; font-size:0.75rem; color:var(--amber); margin-bottom:10px;}
+  h2{font-family:'Bebas Neue',sans-serif; font-size:clamp(2rem,4.5vw,3.2rem); letter-spacing:1px; margin-bottom:36px;}
+  p.lead{color:var(--paper-dim); max-width:640px; line-height:1.7; margin-bottom:40px; font-size:1.02rem;}
+
+  /* ---------- corkboard (portfolio grid) ---------- */
+  .corkboard{
+    background:
+      linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+      repeating-radial-gradient(circle at 20% 30%, #3b2a1d 0 2px, #43301f 2px 4px);
+    background-blend-mode:multiply;
+    background-color:#4a3520;
+    padding:48px; border-radius:2px;
+  }
+  .cards{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:28px;}
+  .card{
+    background:var(--paper); color:var(--ink); padding:24px 22px 20px;
+    transform:rotate(var(--r,-1.2deg));
+    box-shadow:0 14px 30px rgba(0,0,0,0.4);
+    position:relative; min-height:190px;
+    transition: transform .25s ease;
+  }
+  .card:nth-child(2){--r:1deg;}
+  .card:nth-child(3){--r:-0.6deg;}
+  .card:nth-child(4){--r:0.8deg;}
+  .card:nth-child(5){--r:-1.4deg;}
+  .card:nth-child(6){--r:1.3deg;}
+  .card:hover{transform:rotate(0deg) translateY(-6px) scale(1.02); z-index:2;}
+  .pin{
+    position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+    width:14px; height:14px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #e8574f, #8b2e2e);
+    box-shadow:0 3px 6px rgba(0,0,0,0.5);
+  }
+  .card .kind{font-family:'Inter',sans-serif; font-size:0.68rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--crimson); font-weight:600;}
+  .card h3{font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:0.5px; margin:8px 0 10px;}
+  .card p{font-family:'Courier Prime',monospace; font-size:0.85rem; line-height:1.55; color:#2b2926;}
+  .card .fill{margin-top:14px; font-family:'Inter',sans-serif; font-size:0.72rem; color:var(--slate); font-style:italic;}
+
+  /* ---------- content types ---------- */
+  .types{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:2px; background:var(--line);}
+  .type{background:var(--ink); padding:26px 22px;}
+  .type .num{font-family:'Bebas Neue',sans-serif; color:var(--amber); font-size:1.1rem;}
+  .type h4{margin-top:8px; font-size:1.05rem; letter-spacing:0.3px;}
+  .type p{margin-top:8px; font-size:0.88rem; color:var(--slate); line-height:1.55;}
+
+  /* ---------- about / contact ---------- */
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;}
+  @media(max-width:800px){.about-grid{grid-template-columns:1fr;}}
+  .about-grid p{color:var(--paper-dim); line-height:1.75; margin-bottom:16px;}
+  .stat{display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line); font-size:0.9rem;}
+  .stat b{font-family:'Bebas Neue',sans-serif; color:var(--amber); font-size:1.2rem; letter-spacing:1px;}
+
+  footer{
+    padding:60px 8vw 50px; border-top:1px solid var(--line);
+    display:flex; flex-wrap:wrap; justify-content:space-between; gap:20px; align-items:center;
+  }
+  footer .logo{font-size:1.2rem;}
+  .contact-links{display:flex; gap:20px; font-size:0.85rem;}
+  .contact-links a{text-decoration:underline; text-underline-offset:4px; opacity:0.8;}
+  .contact-links a:hover{opacity:1; color:var(--amber);}
+</style>
+</head>
+<body>
+
+<div class="rail left">
+  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+<div class="rail right">
+  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<nav>
+  <div class="logo">TAKE ONE</div>
+  <div class="navlinks">
+    <a href="#work">Scripts</a>
+    <a href="#stories">Stories</a>
+    <a href="#dialogues">Dialogues</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="page">
+    <div class="slug">INT. WRITER'S DESK — NIGHT</div>
+    <div class="action">A single lamp. Pages everywhere. Someone types the first line of something that hasn't been written yet<span class="caret">&nbsp;</span></div>
+    <div class="char">YOUR NAME</div>
+    <div class="dialogue">(V.O.)<br>Replace this line with your name, then tell them what you write.</div>
+    <div class="byline">
+      <div class="name">YOUR NAME HERE</div>
+      <div class="role">Screenwriter · Storyteller · Dialogue Writer</div>
+      <span class="tag">Portfolio — Draft 1</span>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="eyebrow">Featured Work</div>
+  <h2>Scripts, Stories &amp; Dialogues</h2>
+  <p class="lead">This is your corkboard. Pin your best three pieces from each category here — a scene, a short story, a stretch of dialogue you're proud of. Swap the placeholder text below for your real work.</p>
+  <div class="corkboard">
+    <div class="cards">
+      <div class="card"><span class="pin"></span><div class="kind">Script — Feature</div><h3>Title Goes Here</h3><p>Logline: one or two sentences that sell the whole idea. This is the first thing anyone reads — make it earn the click.</p><div class="fill">→ replace with your logline + link to full script</div></div>
+      <div class="card"><span class="pin"></span><div class="kind">Story — Short</div><h3>Title Goes Here</h3><p>A one-paragraph hook. What's the situation, who wants what, and what's stopping them?</p><div class="fill">→ replace with your opening paragraph</div></div>
+      <div class="card"><span class="pin"></span><div class="kind">Dialogue Sample</div><h3>Scene Title</h3><p>CHARACTER A: A line that shows voice, not just information.<br>CHARACTER B: A line that pushes back.</p><div class="fill">→ replace with your best exchange</div></div>
+      <div class="card"><span class="pin"></span><div class="kind">Script — Short Film</div><h3>Title Goes Here</h3><p>Short films live or die on a single strong idea, executed tight. Summarize it in three lines.</p><div class="fill">→ replace with logline + link</div></div>
+      <div class="card"><span class="pin"></span><div class="kind">Story — Flash Fiction</div><h3>Title Goes Here</h3><p>Under 1,000 words. One image, one turn, one gut-punch ending.</p><div class="fill">→ replace with your text</div></div>
+      <div class="card"><span class="pin"></span><div class="kind">Dialogue — Comedic</div><h3>Scene Title</h3><p>Show range. If your dramatic sample is heavy, put something funny here.</p><div class="fill">→ replace with your best exchange</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="eyebrow">Also worth including</div>
+  <h2>Other formats to add over time</h2>
+  <p class="lead">A working writer's portfolio is more than finished scripts. These are the supporting pieces that show range and process — add them as you make them.</p>
+  <div class="types">
+    <div class="type"><div class="num">01</div><h4>Loglines</h4><p>One-sentence pitches for ideas you haven't written yet. Shows you can generate concepts fast.</p></div>
+    <div class="type"><div class="num">02</div><h4>Treatments / Synopses</h4><p>A one-to-three page prose walkthrough of a story, before it's formatted as a script.</p></div>
+    <div class="type"><div class="num">03</div><h4>Character bios</h4><p>Backstory, want vs. need, and voice notes for your key characters.</p></div>
+    <div class="type"><div class="num">04</div><h4>Shot lists / storyboards</h4><p>Even rough sketches show you think visually, not just in dialogue.</p></div>
+    <div class="type"><div class="num">05</div><h4>Table reads / audio-video</h4><p>A recorded reading of a scene, even on your phone, brings dialogue to life for a reader.</p></div>
+    <div class="type"><div class="num">06</div><h4>Adaptations</h4><p>A short scene adapted from a novel, news story, or true event — shows you can rework material.</p></div>
+  </div>
+</section>
+
+<section id="dialogues">
+  <div class="eyebrow">Craft focus</div>
+  <h2>Why dialogue gets its own section</h2>
+  <p class="lead">Producers and readers often judge a whole script by a handful of dialogue lines. Keep a running file of your sharpest exchanges — even out of context — and feature the best three or four here on their own, separate from full scripts.</p>
+</section>
+
+<section id="about">
+  <div class="eyebrow">About</div>
+  <h2>The Writer</h2>
+  <div class="about-grid">
+    <div>
+      <p>Replace this paragraph with two or three sentences about who you are as a writer — what stories you're drawn to, what you want a reader to feel, and what you're working toward.</p>
+      <p>Add a line about your process: how you outline, how many drafts you write, what you're currently working on.</p>
+    </div>
+    <div>
+      <div class="stat"><span>Scripts written</span><b>—</b></div>
+      <div class="stat"><span>Stories completed</span><b>—</b></div>
+      <div class="stat"><span>Favorite genre</span><b>—</b></div>
+      <div class="stat"><span>Currently writing</span><b>—</b></div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="logo">TAKE ONE</div>
+  <div class="contact-links">
+    <a href="mailto:you@example.com">Email</a>
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>
